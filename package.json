@@ -1,0 +1,25 @@
+{
+  "name": "frankensmith",
+  "version": "0.0.1",
+  "description": "Static Site compiler cobbled together using Gulp & Metalsmith",
+  "main": "lib",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamkiss/frankensmith.git"
+  },
+  "keywords": [
+    "gulp",
+    "metalsmith",
+    "static",
+    "site"
+  ],
+  "author": "Adam Kiss <iam@adamkiss.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adamkiss/frankensmith/issues"
+  },
+  "homepage": "https://github.com/adamkiss/frankensmith#readme"
+}
