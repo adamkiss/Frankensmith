@@ -3,6 +3,8 @@
 ##
 module.exports = (g, gp, config)->
 
+  _ = require 'lodash'
+
   ##
   # HASH LATEST STYLES & SCRIPTS
   ##
@@ -12,11 +14,15 @@ module.exports = (g, gp, config)->
       .pipe gp.remoteDest 'public/assets'
       .pipe gp.hash.manifest('assets-manifest.json')
       .pipe gp.remoteDest 'data'
-
   g.task 'build:manifest-clean', ['build:manifest'], ()->
     fs = require 'fs'
-    fs.readFile config.site.path('data/assets-manifest.json'), 'utf8'. (err, data)->
+    fs.readFile config.site.path('data/assets-manifest.json'), 'utf8', (err, data)->
       throw err if err?
 
       manifest = JSON.parse data
-      console.log Object.keys manifest
+      manifiles = _.map Object.keys(manifest), (file)->
+        "public/assets/#{file}"
+
+      gp.remoteSrc manifiles, {read: false}
+        .pipe gp.clean()
+
