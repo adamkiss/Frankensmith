@@ -1,19 +1,19 @@
-module.exports = (gulp, plugins, config)->
-  plugins.browserSync = require 'browser-sync'
+module.exports = (gulp, gp, cfg)->
+  gp.browserSync = require 'browser-sync'
 
   gulp.task 'connect-sync', ()->
-    plugins.connectPhp.server {
+    gp.connectPhp.server {
       port:      1110
-      ini:       config.paths.self 'php/server.ini'
-      router:    config.paths.self 'php/router.php'
+      ini:       cfg.self.path 'php/server.ini'
+      router:    cfg.self.path 'php/router.php'
       stdio:     [0, 'ignore', 'pipe']
       keepalive: true
-      base:      config.paths.site()
+      base:      cfg.site.path('public')
     }, ()->
-      plugins.browserSync {
-        proxy:  '127.0.0.1'
+      gp.browserSync {
+        proxy:  'localhost:1110'
         port:   '1111'
-        open:   true
+        open:   false
         notify: false
         ghostMode:
           forms: false

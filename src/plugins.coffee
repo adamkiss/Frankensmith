@@ -8,6 +8,10 @@ module.exports = (gulp, plugins, config)->
   plugins.remoteDest = (target_files)->
     gulp.dest target_files, {cwd: config.site.path()}
 
+  # gulp.watch wrapper as above
+  plugins.remoteWatch = (globs, tasks)->
+    gulp.watch globs, { cwd: config.site.path() }, tasks
+
   plugins.plumberNotify = ()->
     plugins.plumber {
       errorHandler: plugins.notify.onError "Error: <%= error.message %>"

@@ -12,5 +12,13 @@ require('./tasks/styles')(gulp, plugins, config)
 require('./tasks/assets')(gulp, plugins, config)
 require('./tasks/build')(gulp, plugins, config)
 
-gulp.task 'default', ()->
-  # SERVE
+gulp.task 'serve:reload', ()->
+  plugins.browserSync.reload()
+
+gulp.task 'serve', ['connect-sync'], ()->
+  plugins.remoteWatch 'assets/styles/**/*.?(scss|css)', ['styles:serve']
+  plugins.remoteWatch 'assets/scripts/**/*.js', ['scripts:serve']
+  plugins.remoteWatch 'assets/images/**/*.?(jpg|jpeg|png|gif|svg)', ['images']
+  plugins.remoteWatch '{data,source}/**/*', ['serve:reload']
+
+gulp.task 'default', ['serve']
