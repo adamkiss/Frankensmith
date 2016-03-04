@@ -6,17 +6,16 @@ module.exports = (gulp, plugins, config)->
 
   # gulp.dest wrapper as above
   plugins.remoteDest = (target_files)->
-    console.log target_files
     gulp.dest target_files, {cwd: config.site.path()}
 
   plugins.plumberNotify = ()->
     plugins.plumber {
       errorHandler: plugins.notify.onError "Error: <%= error.message %>"
     }
-
   plugins.PE = require 'pretty-error'
-  plugins.browserify = require 'browserify'
-  plugins.coffeeify  = require 'coffeeify'
-  plugins.watchify   = require 'watchify'
+
+  plugins.browserify      = require 'browserify'
+  plugins.coffeeify       = require 'coffeeify'
+  plugins.bundleCollapser = require 'bundle-collapser/plugin'
 
   plugins

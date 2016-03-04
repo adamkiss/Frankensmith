@@ -4,15 +4,12 @@
 
 module.exports = (g, gp, config)->
 
-  es = require 'event-stream'
+  path = require 'path'
   glob = require 'glob'
 
   gp.vinyl =
     source: require 'vinyl-source-stream'
     buffer: require 'vinyl-buffer'
-  gp.utils =
-    globby: require 'globby'
-    through:require 'through2'
 
   taskScripts = (build = false)->
     gp.remoteSrc 'assets/scripts/*.js'
@@ -41,25 +38,51 @@ module.exports = (g, gp, config)->
     taskScripts()
       .pipe gp.browserSync.stream()
 
-  g.task 'scripts:browserify', ()->
-    bundleStream = gp.utils.through()
-      .pipe gp.plumber()
-      .pipe gp.vinyl.source './app.js'
-      # .pipe gp.vinyl.buffer()
-      .pipe gp.remoteDest 'public/assets'
+  #
+  # This is abomination. Whatever
+  # Streams don't work for me. (remote paths?). Run over
+  # multiple files instead and emit done() when all files
+  # were processed.
+  #
+  g.task 'scripts:browserify-multiple', (done)->
 
-    gp.utils.globby ['assets/scripts/*.js'], { cwd: config.site.path() }
-      .then (entries)->
-        gp.browserify({
+    doneCount = 0
+    beDoneIf = (match)->
+      doneCount += 1
+      done() if doneCount is match
+
+    glob 'assets/scripts/*.js', { cwd: config.site.path() }, (err, files)->
+      done(err) if err
+
+      files.forEach (entry)->
+        stream = gp.browserify {
           basedir: config.site.path()
-          entries: entries
+          entries: entry
           extensions: '.coffee'
-          debug: true
+          # debug: true
+          plugin: [gp.bundleCollapser]
           transform: [gp.coffeeify]
-        }).bundle().pipe(bundleStream)
-      .catch (err)->
-        bundleStream.emit 'error', gp.notify.error(err)
+        }
+        .bundle()
+        .pipe gp.plumber()
+        .pipe gp.vinyl.source path.basename(entry)
+        .pipe gp.vinyl.buffer()
+        .pipe gp.uglify()
+        .pipe gp.remoteDest 'public/assets'
+        .on 'end', ()->
+          beDoneIf files.length
 
-    bundleStream
+        true
 
-  # g.task 'scripts:browserify2', ()
+  g.task 'scripts:browserify', ()->
+    gp.browserify {
+      basedir: config.site.path()
+      entries: 'assets/scripts/app.js'
+      extensions: '.coffee'
+      # debug: true
+      transform: [gp.coffeeify]
+    }
+    .bundle()
+    .pipe gp.vinyl.source './app.js'
+    .pipe gp.vinyl.buffer()
+    .pipe gp.remoteDest 'public/assets'
