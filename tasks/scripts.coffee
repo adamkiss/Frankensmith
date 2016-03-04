@@ -11,12 +11,49 @@ module.exports = (g, gp, config)->
     source: require 'vinyl-source-stream'
     buffer: require 'vinyl-buffer'
 
-  taskScripts = (build = false)->
-    gp.remoteSrc 'assets/scripts/*.js'
+  taskBrowserify = (entry, build = false)->
+    gp.browserify {
+      entries: entry
+      basedir: config.site.path()
+      debug: !build
+      extensions: '.coffee'
+      plugin: [gp.bundleCollapser]
+      transform: [gp.coffeeify]
+    }
+      .bundle()
       .pipe gp.plumber()
-      .pipe gp.include()
-      .pipe gp.uglify()
-      .pipe gp.remoteDest 'public/assets'
+      .pipe gp.vinyl.source path.basename(entry)
+      .pipe gp.vinyl.buffer()
+
+  #
+  # This is abomination. Whatever
+  # Streams don't work for me. (remote paths?). Run over
+  # multiple files instead and emit done() when all files
+  # were processed.
+  #
+  taskBrowserifyBuild = (done, build = false)->
+    doneCount = 0
+    beDoneIf = (match)->
+      doneCount += 1
+      if doneCount is match
+        gp.browserSync.reload()
+        done()
+
+    glob 'assets/scripts/*.js', { cwd: config.site.path() }, (err, files)->
+      done(err) if err
+
+      files.forEach (entry)->
+        if (build)
+          taskBrowserify entry, true
+            .pipe gp.uglify()
+            .pipe gp.remoteDest 'public/assets'
+            .on 'end', ()->
+              beDoneIf files.length
+        else
+          taskBrowserify entry
+            .pipe gp.remoteDest 'public/assets'
+            .on 'end', ()->
+              beDoneIf files.length
 
   g.task 'scripts:clean', ()->
     gp.remoteSrc 'public/assets/*.js', {read: false}
@@ -31,49 +68,13 @@ module.exports = (g, gp, config)->
       .pipe gp.jshint config.gp.jshint
       .pipe gp.jshint.reporter 'jshint-stylish'
 
-  g.task 'scripts:build', ['scripts:clean'], ()->
-    taskScripts(true)
+  g.task 'scripts:build', ['scripts:clean'], (done)->
+    taskBrowserifyBuild(done, true)
 
-  g.task 'scripts:serve', ['scripts:lint'], ()->
-    taskScripts()
-      .pipe gp.browserSync.stream()
+  g.task 'scripts:serve', ['scripts:lint'], (done)->
+    taskBrowserifyBuild(done)
 
-  #
-  # This is abomination. Whatever
-  # Streams don't work for me. (remote paths?). Run over
-  # multiple files instead and emit done() when all files
-  # were processed.
-  #
-  g.task 'scripts:browserify-multiple', (done)->
-
-    doneCount = 0
-    beDoneIf = (match)->
-      doneCount += 1
-      done() if doneCount is match
-
-    glob 'assets/scripts/*.js', { cwd: config.site.path() }, (err, files)->
-      done(err) if err
-
-      files.forEach (entry)->
-        stream = gp.browserify {
-          basedir: config.site.path()
-          entries: entry
-          extensions: '.coffee'
-          # debug: true
-          plugin: [gp.bundleCollapser]
-          transform: [gp.coffeeify]
-        }
-        .bundle()
-        .pipe gp.plumber()
-        .pipe gp.vinyl.source path.basename(entry)
-        .pipe gp.vinyl.buffer()
-        .pipe gp.uglify()
-        .pipe gp.remoteDest 'public/assets'
-        .on 'end', ()->
-          beDoneIf files.length
-
-        true
-
+  # Simple version for future ref.
   g.task 'scripts:browserify', ()->
     gp.browserify {
       basedir: config.site.path()

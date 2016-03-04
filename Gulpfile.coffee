@@ -11,6 +11,7 @@ require('./tasks/serversync')(gulp, plugins, config)
 require('./tasks/scripts')(gulp, plugins, config)
 require('./tasks/styles')(gulp, plugins, config)
 require('./tasks/assets')(gulp, plugins, config)
+require('./tasks/build')(gulp, plugins, config)
 
 gulp.task 'default', ()->
   console.log config.site.to config.self.path 'site/modules'
