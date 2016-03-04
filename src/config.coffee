@@ -14,6 +14,29 @@ module.exports = ()->
   config = { 
     self: new Directory process.cwd()
     site: new Directory process.env.INIT_CWD
+    gp:
+      jshint:
+        node: true
+        esnext: true
+        bitwise: true
+        curly: true
+        immed: true
+        newcap: true
+        noarg: true
+        undef: true
+        unused: 'vars'
+      sass:
+        build:
+          outputStyle:    'compressed'
+          sourceComments:  false
+          errLogToConsole: true
+        serve:
+          sourceMap:         true
+          sourceMapContents: true
+          sourceComments:   'none'
+          errLogToConsole:   true
+      imagemin:
+        progressive: true
   }
 
   return config

@@ -6,6 +6,7 @@ module.exports = (gulp, plugins, config)->
 
   # gulp.dest wrapper as above
   plugins.remoteDest = (target_files)->
+    console.log target_files
     gulp.dest target_files, {cwd: config.site.path()}
 
   plugins.plumberNotify = ()->
@@ -14,5 +15,8 @@ module.exports = (gulp, plugins, config)->
     }
 
   plugins.PE = require 'pretty-error'
+  plugins.browserify = require 'browserify'
+  plugins.coffeeify  = require 'coffeeify'
+  plugins.watchify   = require 'watchify'
 
   plugins

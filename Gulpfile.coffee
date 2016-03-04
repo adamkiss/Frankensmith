@@ -5,12 +5,12 @@ gulp        = require 'gulp'
 config      = require('./src/config')()
 plugins     = require('gulp-load-plugins')()
 plugins     = require('./src/plugins')(gulp, plugins, config)
-tasks       =
-  # smith:      require('./src/tasks-metalsmith')(gulp, plugins, config)
-  serversync: require('./src/tasks-serversync')(gulp, plugins, config)
-  assets:     require('./src/tasks-assets')(gulp, plugins, config)
-  scripts:    require('./src/tasks-scripts')(gulp, plugins, config)
 
+  # smith:      require('./src/tasks-metalsmith')(gulp, plugins, config)
+require('./tasks/serversync')(gulp, plugins, config)
+require('./tasks/scripts')(gulp, plugins, config)
+require('./tasks/styles')(gulp, plugins, config)
+require('./tasks/assets')(gulp, plugins, config)
 
 gulp.task 'default', ()->
   console.log config.site.to config.self.path 'site/modules'
