@@ -23,7 +23,7 @@ gulp.task 'serve', ['connect-sync'], ()->
   plugins.remoteWatch 'assets/styles/**/*.?(scss|css)', ['styles:serve']
   plugins.remoteWatch 'assets/scripts/**/*.js', ['scripts:serve']
   plugins.remoteWatch 'assets/images/**/*.?(jpg|jpeg|png|gif|svg)', ['images']
-  plugins.remoteWatch '{data,source}/**/*', ['serve:reload-site']
+  plugins.remoteWatch '{data,partials,source}/**/*', ['serve:reload-site']
 
 gulp.task 'build', ()->
   plugins.runSequence 'build:manifest-clean', 'metalsmith:serve'
