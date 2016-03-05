@@ -37,6 +37,13 @@ module.exports = ()->
           errLogToConsole:   true
       imagemin:
         progressive: true
+    mp:
+      ignore: [
+        '.DS_Store'
+      ]
+      inPlace:
+        engine: 'jade'
+        cache : false
   }
 
   return config
