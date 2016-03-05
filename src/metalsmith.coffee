@@ -1,9 +1,10 @@
 module.exports = (g, gp, cfg)->
 
-  MS  =  require 'metalsmith'
-  msp =  require('load-metalsmith-plugins')()
-  msh =  require('./metalsmith-helpers')(g, gp, MS, msp, cfg)
-  msp =  require('./metalsmith-plugins')(g, gp, MS, msp, cfg)
+  _   = require 'lodash'
+  MS  = require 'metalsmith'
+  msp = require('load-metalsmith-plugins')()
+  msh = require('./metalsmith-helpers')(g, gp, MS, msp, cfg)
+  msp = require('./metalsmith-plugins')(g, gp, MS, msp, cfg)
 
   renameMap = [
     [/\.php\.jade$/, '.php'],
@@ -17,9 +18,12 @@ module.exports = (g, gp, cfg)->
       .clean        false
 
       .use msp.ignore cfg.mp.ignore
+      .use msp.define {
+        assets: require cfg.site.path 'data/assets-manifest.json'
+      }
       .use msp.filenames()
       .use msp.pathForJade()
-      .use msp.inPlace cfg.mp.inPlace
+      .use msp.inPlace _.extend cfg.mp.inPlace, msh
       .use msp.rename renameMap
 
       .build (error)->
