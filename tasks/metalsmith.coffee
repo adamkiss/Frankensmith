@@ -1,5 +1,5 @@
 module.exports = (gulp, plugins, config)->
-  metalsmith = require '../src/metalsmith'
+  Metalsmith = require('../src/metalsmith')(gulp, plugins, config)
 
   gulp.task 'metalsmith:serve', (done)->
-    Metalsmith done
+    Metalsmith(done)
