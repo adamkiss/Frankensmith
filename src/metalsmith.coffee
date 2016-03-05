@@ -1,9 +1,9 @@
 module.exports = (g, gp, cfg)->
 
-  MS:   require 'metalsmith'
-  msp:  require('load-metalsmith-plugins')()
-  msh:  require('./metalsmith-helpers')()
-  msm:  require('./metalsmith-modules')()
+  MS  =  require 'metalsmith'
+  msp =  require('load-metalsmith-plugins')()
+  msh =  require('./metalsmith-helpers')(g, gp, MS, msp, cfg)
+  msp =  require('./metalsmith-plugins')(g, gp, MS, msp, cfg)
 
   renameMap = [
     [/\.php\.jade$/, '.php'],
