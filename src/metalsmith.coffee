@@ -12,7 +12,7 @@ module.exports = (g, gp, cfg)->
 
   Metalsmith = (done)->
     MS cfg.site.to cfg.self.path()
-      .source      'site'
+      .source      'source'
       .destination 'public'
       .clean        false
 
