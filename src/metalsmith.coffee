@@ -10,8 +10,8 @@ module.exports = (g, gp, cfg)->
     [/\.jade$/     , '.htm']
   ]
 
-  Metalsmith = ()->
-    MS cfg.site.to cfg.self.path()
+  Metalsmith = (gulpCallback)->
+    MS cfg.site.path()
       .source      'source'
       .destination 'public'
       .clean        false
@@ -24,9 +24,7 @@ module.exports = (g, gp, cfg)->
 
       .build (error)->
         if (error)
-          msp.notifier.notify {
-            title: 'Metalsmith error'
-            message: error
-          }
+          gulpCallback(error)
         else
           gp.browserSync.reload()
+          gulpCallback()

@@ -44,6 +44,7 @@ module.exports = ()->
       inPlace:
         engine: 'jade'
         cache : false
+        pattern: '*.jade*'
   }
 
   return config
