@@ -18,6 +18,8 @@ module.exports = (gulp, plugins, config)->
     }
   plugins.PE = require 'pretty-error'
 
+  plugins.runSequence = require 'run-sequence'
+
   plugins.browserify      = require 'browserify'
   plugins.coffeeify       = require 'coffeeify'
   plugins.bundleCollapser = require 'bundle-collapser/plugin'
