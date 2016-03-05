@@ -9,7 +9,7 @@ module.exports = (g, gp, ms, msp, cfg) ->
   msp.pathForJade = ()->
     setPath = (name, files)->
       if name.indexOf('.jade') != -1
-        files[name].filename = cfg.site.path "source/#{name.split('/').pop()}"
+        files[name].filename = cfg.site.path name.split('/').pop()
 
     (files, metalsmith, done)->
       setPath name, files for name, file of files
