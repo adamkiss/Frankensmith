@@ -15,6 +15,4 @@ module.exports = (g, gp, ms, msp, cfg) ->
       setPath name, files for name, file of files
       done()
 
-  msp.notifier = require('node-notifier')
-
   return msp

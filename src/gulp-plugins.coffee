@@ -12,10 +12,6 @@ module.exports = (gulp, plugins, config)->
   plugins.remoteWatch = (globs, tasks)->
     gulp.watch globs, { cwd: config.site.path() }, tasks
 
-  plugins.plumberNotify = ()->
-    plugins.plumber {
-      errorHandler: plugins.notify.onError "Error: <%= error.message %>"
-    }
   plugins.PE = require 'pretty-error'
 
   plugins.runSequence = require 'run-sequence'
