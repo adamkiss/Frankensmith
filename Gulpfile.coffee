@@ -11,6 +11,7 @@ require('./tasks/scripts')(gulp, plugins, config)
 require('./tasks/styles')(gulp, plugins, config)
 require('./tasks/assets')(gulp, plugins, config)
 require('./tasks/build')(gulp, plugins, config)
+require('./tasks/gallery')(gulp, plugins, config)
 
 
 gulp.task 'serve:reload', ()->
