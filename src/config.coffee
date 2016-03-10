@@ -47,6 +47,6 @@ module.exports = ()->
         pattern: '*.jade*'
   }
 
-  config.fs = require(config.site.path 'frankensmith.js')()
+  config.fs = require(config.site.path 'site.js')()
 
   return config
