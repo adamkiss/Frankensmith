@@ -73,7 +73,10 @@ module.exports = (g, gp, cfg)->
       )
 
   g.task 'gallery', ['gallery:jsonize'], ()->
+    logwhite = (string)-> gp.util.colors.white(string)
+    loggreen = (string)-> gp.util.colors.green(string)
+
     glob.sync(cfg.site.path 'assets/galleries/*/').forEach (directory)->
       directoryName = path.parse(directory).base
-      rimraf cfg.site.path(path.join('assets/galleries', directory)), ()->
-        gp.util.log(directoryName, gp.util.colors.green('removed'))
+      rimraf cfg.site.path(path.join('assets/galleries', directoryName)), ()->
+        gp.util.log(logwhite('Gallery\:'),logwhite('Removed'),loggreen(directoryName))
