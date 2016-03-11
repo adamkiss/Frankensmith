@@ -14,8 +14,6 @@ module.exports = (g, gp, cfg)->
   Metalsmith = (opts, callback)->
     buildMode = opts.build || false
 
-    console.log buildMode
-
     MS cfg.site.path()
       .source      'source'
       .destination 'public'
