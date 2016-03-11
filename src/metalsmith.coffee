@@ -12,7 +12,10 @@ module.exports = (g, gp, cfg)->
   ]
 
   Metalsmith = (opts, callback)->
-    buildMode = opts.build || false
+    cfg.runtime = {
+      build: opts.build || false
+      assets: require cfg.site.path 'data/assets-manifest.json'
+    }
 
     MS cfg.site.path()
       .source      'source'
@@ -22,9 +25,7 @@ module.exports = (g, gp, cfg)->
 
       .use msp.matters()
       .use msp.ignore(cfg.mp.ignore)
-      .use msp.define({
-        assets: require cfg.site.path 'data/assets-manifest.json'
-      })
+      .use msp.define({})
       .use msp.filenames()
       .use msp.pathForJade()
       .use msp.inPlace(_.extend(cfg.mp.inPlace, msh))
