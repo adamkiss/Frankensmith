@@ -27,6 +27,6 @@ gulp.task 'serve', ['connect-sync'], ()->
   plugins.remoteWatch '{data,partials,source}/**/*', ['serve:reload-site']
 
 gulp.task 'build', ()->
-  plugins.runSequence 'build:manifest-clean', 'metalsmith:serve'
+  plugins.runSequence 'build:manifest-clean', 'metalsmith:build'
 
 gulp.task 'default', ['serve']

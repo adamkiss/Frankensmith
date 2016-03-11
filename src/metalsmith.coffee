@@ -11,24 +11,28 @@ module.exports = (g, gp, cfg)->
     [/\.jade$/     , '.htm']
   ]
 
-  Metalsmith = (gulpCallback)->
+  Metalsmith = (opts, callback)->
+    buildMode = opts.build || false
+
+    console.log buildMode
+
     MS cfg.site.path()
       .source      'source'
       .destination 'public'
       .clean        false
 
-      .use msp.ignore cfg.mp.ignore
-      .use msp.define {
+      .use msp.ignore(cfg.mp.ignore)
+      .use msp.define({
         assets: require cfg.site.path 'data/assets-manifest.json'
-      }
+      })
       .use msp.filenames()
       .use msp.pathForJade()
-      .use msp.inPlace _.extend cfg.mp.inPlace, msh
-      .use msp.rename renameMap
+      .use msp.inPlace(_.extend(cfg.mp.inPlace, msh))
+      .use msp.rename(renameMap)
 
       .build (error)->
         if (error)
-          gulpCallback(error)
+          callback(error)
         else
           gp.browserSync.reload()
-          gulpCallback()
+          callback()
