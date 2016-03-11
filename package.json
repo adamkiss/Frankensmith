@@ -55,6 +55,7 @@
     "metalsmith-filenames": "^1.0.0",
     "metalsmith-ignore": "^0.1.2",
     "metalsmith-in-place": "^1.4.3",
+    "metalsmith-matters": "^1.1.0",
     "metalsmith-rename": "^1.0.0",
     "pretty-error": "^2.0.0",
     "run-sequence": "^1.1.5",

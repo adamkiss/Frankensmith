@@ -20,7 +20,9 @@ module.exports = (g, gp, cfg)->
       .source      'source'
       .destination 'public'
       .clean        false
+      .frontmatter  false
 
+      .use msp.matters()
       .use msp.ignore(cfg.mp.ignore)
       .use msp.define({
         assets: require cfg.site.path 'data/assets-manifest.json'
