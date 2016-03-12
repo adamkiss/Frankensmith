@@ -1,10 +1,13 @@
-module.exports = (gulp, plugins, config)->
-  Metalsmith = require('../src/metalsmith')(gulp, plugins, config)
+module.exports = (g, gp, cfg)->
+  # Metalsmith = require('../src/metalsmith')(g, gp, cfg)
+  Msfile = require('../src/metalsmith')(g, gp, cfg)
+  Metalsmith = Msfile.Metalsmith
+  testGrayMatter = Msfile.testGrayMatter
 
-  gulp.task 'metalsmith:serve', (callback)->
+  g.task 'metalsmith:serve', (callback)->
     Metalsmith {}, callback
 
-  gulp.task 'metalsmith:build', (callback)->
+  g.task 'metalsmith:build', (callback)->
     Metalsmith {
       build: true
     }, callback

@@ -1,4 +1,5 @@
 # Metalsmith plugins (doh)
+_ = require 'lodash'
 
 module.exports = (g, gp, ms, msp, cfg) ->
   ###
@@ -13,6 +14,39 @@ module.exports = (g, gp, ms, msp, cfg) ->
 
     (files, metalsmith, done)->
       setPath name, files for name, file of files
+      done()
+
+
+  ###
+    Generate pages
+
+    Generates pages from virtual source (= yaml/json/other gray-matter supported files).
+  ###
+  class VirtualFile
+    @path       # key for metalsmith
+    @metadata   # metadata
+    @content    # base for buffer
+    @children   # children of this page
+
+    constructor: (path, object)->
+      console.log path, object
+
+    get: ()->
+      _.extend(@metadata, {contents: new Buffer @content})
+      @metadata
+
+  msp.generatePages = (generators)->
+    generatedPages = {}
+
+    process = (generator, files)->
+      virtualFiles = {}
+      for path, config of generator
+        do (path, config)->
+          newFile = new VirtualFile path, config
+          _.extend virtualFiles, newFile
+
+    (files, ms, done)->
+      process generator, files for name, generator of generators
       done()
 
   return msp
