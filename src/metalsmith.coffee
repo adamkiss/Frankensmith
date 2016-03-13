@@ -18,14 +18,14 @@ module.exports = (g, gp, cfg)->
     path = require 'path'
 
     returnData =
-      generators: {}
+      generators: []
       metadata: {}
 
     glob.sync(cfg.site.path(relativePath)).forEach (file)->
       fileParts = path.parse(file).name.split('_')
       fileData = matter("---\n"+fs.readFileSync(file)).data
       if fileParts[0] is 'generator'
-        _.set(returnData.generators, fileParts.slice(1).join('.'), fileData)
+        returnData.generators.push fileData
       else
         _.set(returnData.metadata, fileParts.join('.'), fileData)
 
@@ -47,7 +47,7 @@ module.exports = (g, gp, cfg)->
 
       .use msp.matters()
       .use msp.ignore(cfg.mp.ignore)
-      .use msp.generatePages(cfg.metalsmith.generators)
+      .use msp.virtualPages(cfg.metalsmith.generators)
       .use msp.define(cfg.metalsmith.metadata)
       .use msp.filenames()
       .use msp.pathForJade()
