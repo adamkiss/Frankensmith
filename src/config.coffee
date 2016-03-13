@@ -44,7 +44,7 @@ module.exports = ()->
       inPlace:
         engine: 'jade'
         cache : false
-        pattern: '*.jade*'
+        pattern: '**/*.jade*'
   }
 
   config.fs = require(config.site.path 'site.js')()
