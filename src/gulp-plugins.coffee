@@ -12,8 +12,7 @@ module.exports = (gulp, plugins, config)->
   plugins.remoteWatch = (globs, tasks)->
     gulp.watch globs, { cwd: config.site.path() }, tasks
 
-  plugins.PE = require 'pretty-error'
-
+  plugins.del = require 'del'
   plugins.runSequence = require 'run-sequence'
 
   plugins.browserify      = require 'browserify'
