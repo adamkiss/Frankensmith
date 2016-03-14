@@ -21,9 +21,9 @@ module.exports = (g, gp, cfg)->
       generators: []
       metadata: {}
 
-    glob.sync(cfg.site.path(relativePath)).forEach (file)->
+    glob.sync(cfg.site.path relativePath).forEach (file)->
       fileParts = path.parse(file).name.split('_')
-      fileData = matter("---\n"+fs.readFileSync(file)).data
+      fileData = matter( "---\n" + fs.readFileSync file ).data
       if fileParts[0] is 'generator'
         returnData.generators.push fileData
       else
