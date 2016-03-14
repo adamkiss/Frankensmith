@@ -29,8 +29,7 @@ module.exports = (g, gp, cfg)->
       .use msp.virtualPages(cfg.metalsmith.generators)
       .use msp.define(cfg.metalsmith.metadata)
       .use msp.collections(cfg.fs.collections)
-      .use msp.filenames()
-      .use msp.pathForJade()
+      .use msp.metaPath()
       .use msp.inPlace(_.extend(cfg.mp.inPlace, msh))
       .use msp.rename(renameMap)
 
