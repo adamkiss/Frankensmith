@@ -12,7 +12,7 @@ module.exports = (g, gp, cfg)->
   ]
 
   Metalsmith: (opts, callback)->
-    cfg.metalsmith = msp.readDataFiles 'data/*.*'
+    cfg.metalsmith = msp.readDataFiles 'source/data/*.*'
     cfg.runtime = {
       build: opts.build || false
       assets: cfg.metalsmith.metadata['assets-manifest']
@@ -28,6 +28,7 @@ module.exports = (g, gp, cfg)->
       .use msp.ignore(cfg.mp.ignore)
       .use msp.virtualPages(cfg.metalsmith.generators)
       .use msp.define(cfg.metalsmith.metadata)
+      .use msp.collections(cfg.fs.collections)
       .use msp.filenames()
       .use msp.pathForJade()
       .use msp.inPlace(_.extend(cfg.mp.inPlace, msh))
