@@ -1,5 +1,7 @@
 'use strict'
 
+require './src/pretty-error'
+
 gulp        = require 'gulp'
 config      = require('./src/config')()
 plugins     = require('gulp-load-plugins')()
