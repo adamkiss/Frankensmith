@@ -15,7 +15,6 @@ require('./tasks/assets')(gulp, plugins, config)
 require('./tasks/build')(gulp, plugins, config)
 require('./tasks/gallery')(gulp, plugins, config)
 
-
 gulp.task 'serve:reload', ()->
   plugins.browserSync.reload()
 
