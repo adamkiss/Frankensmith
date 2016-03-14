@@ -8,17 +8,47 @@ marked = require 'marked'
 
 module.exports = (g, gp, ms, msp, cfg) ->
   ###
-    Prepend path for jade
+    Include metadata to files
 
-    JADE works with root from metalsmith, so it ignores the 'source dir'. We need to set virtual filename of JADE-parsed files to __ROOT__/site/xxx.jade, so we can include and extend files with root of ./site/***
+    - filename (either path/to/file.ext, or full path for jade files)
+    - url (clean URL: /path/to/file/)
   ###
-  msp.pathForJade = ()->
-    setPath = (name, files)->
-      if name.indexOf('.jade') != -1
-        files[name].filename = cfg.site.path 'source/' + name.split('/').pop()
+  class File
+    @file
+
+    constructor: (name, contents)->
+      contents.path.original = name
+      @file = contents
+      @name = path.parse name
+
+    isJade: ()->
+      console.log @name
+
+
+  msp.metaPath = ()->
+    isJade = (name)->
+      (name.indexOf('.jade') != -1)
+
+    jadeFilename = (name)->
+      cfg.site.path 'source/' + name.split('/').pop()
+
+    indexify = (name)->
+      name
+
+    process = (name)->
+      {
+        destname: indexify(name)
+        filename: if isJade(name) then jadeFilename(name) else name
+        url: name.split('.')[0]
+      }
 
     (files, metalsmith, done)->
-      setPath name, files for name, file of files
+      for name, file of files
+        update = process name
+        _.merge file, update
+        if file.destname isnt name
+          delete files[name]
+          files[file.destname] = file
       done()
 
   ###
@@ -42,6 +72,7 @@ module.exports = (g, gp, ms, msp, cfg) ->
         _.set(returnData.metadata, fileParts.join('.'), fileData)
 
     return returnData
+
   ###
     Return
 
