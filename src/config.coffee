@@ -47,6 +47,6 @@ module.exports = ()->
         pattern: '**/*.jade*'
   }
 
-  config.fs = require(config.site.path 'site.js')()
+  config.fs = require(config.site.path 'site.litcoffee')()
 
   return config
