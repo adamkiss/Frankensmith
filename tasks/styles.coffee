@@ -2,10 +2,13 @@
 # STYLES
 ##
 
+gu = require 'gulp-util'
+
 module.exports = (g, gp, config)->
 
   taskStyles = (build = false)->
-    gp.remoteSrc 'source/assets/styles/*.scss'
+    cssSource = if !build && gu.env.css? then gu.env.css else '*'
+    gp.remoteSrc "source/assets/styles/#{cssSource}.scss"
       .pipe gp.plumber()
       .pipe gp.sass(config.gp.sass[if build then 'build' else 'serve'])
       .pipe gp.autoprefixer ['last 2 versions', 'ie 8', 'ios 7', 'android 4']

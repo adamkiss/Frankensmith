@@ -2,6 +2,8 @@
 # SCRIPTS
 ##
 
+gu = require 'gulp-util'
+
 module.exports = (g, gp, config)->
 
   path = require 'path'
@@ -39,7 +41,8 @@ module.exports = (g, gp, config)->
         gp.browserSync.reload()
         done()
 
-    glob 'source/assets/scripts/*.js', { cwd: config.site.path() }, (err, files)->
+    jsSource = if !build && gu.env.js? then gu.env.js else '*'
+    glob "source/assets/scripts/#{jsSource}.js", { cwd: config.site.path() }, (err, files)->
       done(err) if err
 
       files.forEach (entry)->
@@ -63,7 +66,8 @@ module.exports = (g, gp, config)->
   # @TODO lint coffeescript
   # ADD? (MAYBE OKAY?)
   g.task 'scripts:lint', ()->
-    gp.remoteSrc ['source/assets/scripts/*.js', 'source/assets/scripts/src/*.js']
+    lintSource = if gu.env.js? then gu.env.js else '*'
+    gp.remoteSrc ["source/assets/scripts/#{gu.env.js}.js" , 'source/assets/scripts/src/*.js']
       .pipe gp.plumber()
       .pipe gp.jshint config.gp.jshint
       .pipe gp.jshint.reporter 'jshint-stylish'
