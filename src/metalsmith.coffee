@@ -11,29 +11,8 @@ module.exports = (g, gp, cfg)->
     [/\.jade$/     , '.htm']
   ]
 
-  dataFiles = (relativePath)->
-    fs = require 'fs'
-    matter = require 'gray-matter'
-    glob = require 'glob'
-    path = require 'path'
-
-    returnData =
-      generators: []
-      metadata: {}
-
-    glob.sync(cfg.site.path relativePath).forEach (file)->
-      fileParts = path.parse(file).name.split('_')
-      fileData = matter( "---\n" + fs.readFileSync file ).data
-      if fileParts[0] is 'generator'
-        returnData.generators.push fileData
-      else
-        _.set(returnData.metadata, fileParts.join('.'), fileData)
-
-    return returnData
-
   Metalsmith: (opts, callback)->
-    cfg.metalsmith = dataFiles 'data/*.*'
-
+    cfg.metalsmith = msp.readDataFiles 'data/*.*'
     cfg.runtime = {
       build: opts.build || false
       assets: cfg.metalsmith.metadata['assets-manifest']

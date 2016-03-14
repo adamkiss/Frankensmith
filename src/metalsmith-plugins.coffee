@@ -1,7 +1,10 @@
 # Metalsmith plugins (doh)
 _      = require 'lodash'
-marked = require 'marked'
+fs     = require 'fs'
+glob   = require 'glob'
 path   = require 'path'
+matter = require 'gray-matter'
+marked = require 'marked'
 
 module.exports = (g, gp, ms, msp, cfg) ->
   ###
@@ -18,4 +21,30 @@ module.exports = (g, gp, ms, msp, cfg) ->
       setPath name, files for name, file of files
       done()
 
+  ###
+    Read data file
+
+    Reads data files, based on first part of name (generator / anything) splits them into
+    generators for virtual pages and metadata to include
+  ###
+  msp.readDataFiles = (relativePath)->
+    returnData =
+      generators: []
+      metadata: {}
+
+    glob.sync(cfg.site.path relativePath).forEach (file)->
+      fileParts = path.parse(file).name.split('_')
+      fileData = matter( "---\n" + fs.readFileSync file ).data
+
+      if fileParts[0] is 'generator'
+        returnData.generators.push fileData
+      else
+        _.set(returnData.metadata, fileParts.join('.'), fileData)
+
+    return returnData
+  ###
+    Return
+
+    This banner is here just to visually separate things.
+  ###
   return msp
