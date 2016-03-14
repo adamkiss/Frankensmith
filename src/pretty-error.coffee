@@ -17,8 +17,7 @@ pe.appendStyle {
   },
 
   'pretty-error > header > message': {
-     color: 'black',
-     background: 'bright-red',
+     color: 'bright-red',
      padding: '0 1'
   },
   'pretty-error > trace':
@@ -45,5 +44,5 @@ pe.appendStyle {
 }
 
 pe.alias '/Users/adam/Projects/Frankensmith', '(Frankensmith)'
-pe.skipPackage 'gulp', 'orchestrator'
+pe.skipPackage 'gulp', 'orchestrator', 'ware', 'wrap-fn', 'async', 'consolidate', 'bluebird'
 pe.skipNodeFiles()
