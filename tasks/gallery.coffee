@@ -48,7 +48,7 @@ module.exports = (g, gp, cfg)->
 
   # GULP TASKS
   g.task 'gallery:fix-filenames', ()->
-    glob.sync(cfg.site.path 'assets/galleries/**/*.{jpg,jpeg,png}').forEach (file)->
+    glob.sync(cfg.site.path 'source/galleries/**/*.{jpg,jpeg,png}').forEach (file)->
       oldFileName = path.parse file
       newFileName = fixFilename(oldFileName.base)
       if newFileName isnt oldFileName.base
@@ -58,14 +58,14 @@ module.exports = (g, gp, cfg)->
         )
 
   g.task 'gallery:optimize', ['gallery:fix-filenames'], ()->
-    gp.remoteSrc 'assets/galleries/**/*.{jpg,jpeg,png}'
+    gp.remoteSrc 'source/galleries/**/*.{jpg,jpeg,png}'
       .pipe gp.imagemin { progressive: true }
-      .pipe gp.remoteDest 'public/assets/galleries'
+      .pipe gp.remoteDest 'public/galleries'
       .pipe gp.responsive cfg.fs.gallerySettings
-      .pipe gp.remoteDest 'public/assets/galleries'
+      .pipe gp.remoteDest 'public/galleries'
 
   g.task 'gallery:jsonize', ['gallery:optimize'], ()->
-    glob.sync(cfg.site.path 'assets/galleries/*/').forEach (directory)->
+    glob.sync(cfg.site.path 'source/galleries/*/').forEach (directory)->
       gallery = new Directory directory, cfg.fs
       fs.writeFileSync(
         cfg.site.path("data/#{gallery.getJsonFilename()}"),
@@ -76,7 +76,7 @@ module.exports = (g, gp, cfg)->
     logwhite = (string)-> gp.util.colors.white(string)
     loggreen = (string)-> gp.util.colors.green(string)
 
-    glob.sync(cfg.site.path 'assets/galleries/*/').forEach (directory)->
+    glob.sync(cfg.site.path 'source/galleries/*/').forEach (directory)->
       directoryName = path.parse(directory).base
-      rimraf cfg.site.path(path.join('assets/galleries', directoryName)), ()->
+      rimraf cfg.site.path(path.join('source/galleries', directoryName)), ()->
         gp.util.log(logwhite('Gallery\:'),logwhite('Removed'),loggreen(directoryName))

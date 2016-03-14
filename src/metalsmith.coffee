@@ -40,7 +40,7 @@ module.exports = (g, gp, cfg)->
     }
 
     MS cfg.site.path()
-      .source      'source'
+      .source      'source/site'
       .destination 'public'
       .clean        false
       .frontmatter  false

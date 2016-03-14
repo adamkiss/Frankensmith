@@ -39,7 +39,7 @@ module.exports = (g, gp, config)->
         gp.browserSync.reload()
         done()
 
-    glob 'assets/scripts/*.js', { cwd: config.site.path() }, (err, files)->
+    glob 'source/assets/scripts/*.js', { cwd: config.site.path() }, (err, files)->
       done(err) if err
 
       files.forEach (entry)->
@@ -63,7 +63,7 @@ module.exports = (g, gp, config)->
   # @TODO lint coffeescript
   # ADD? (MAYBE OKAY?)
   g.task 'scripts:lint', ()->
-    gp.remoteSrc ['assets/scripts/*.js', 'assets/scripts/src/*.js']
+    gp.remoteSrc ['source/assets/scripts/*.js', 'source/assets/scripts/src/*.js']
       .pipe gp.plumber()
       .pipe gp.jshint config.gp.jshint
       .pipe gp.jshint.reporter 'jshint-stylish'
@@ -78,7 +78,7 @@ module.exports = (g, gp, config)->
   g.task 'scripts:browserify', ()->
     gp.browserify {
       basedir: config.site.path()
-      entries: 'assets/scripts/app.js'
+      entries: 'source/assets/scripts/app.js'
       extensions: '.coffee'
       # debug: true
       transform: [gp.coffeeify]

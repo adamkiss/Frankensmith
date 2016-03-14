@@ -5,7 +5,7 @@
 module.exports = (g, gp, config)->
 
   taskStyles = (build = false)->
-    gp.remoteSrc 'assets/styles/*.scss'
+    gp.remoteSrc 'source/assets/styles/*.scss'
       .pipe gp.plumber()
       .pipe gp.sass(config.gp.sass[if build then 'build' else 'serve'])
       .pipe gp.autoprefixer ['last 2 versions', 'ie 8', 'ios 7', 'android 4']

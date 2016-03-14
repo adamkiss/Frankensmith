@@ -17,7 +17,7 @@ module.exports = (g, gp, config)->
 
   g.task 'build:manifest-clean', ['build:manifest'], ()->
     fs = require 'fs'
-    fs.readFile config.site.path('data/assets-manifest.json'), 'utf8', (err, data)->
+    fs.readFile config.site.path('source/data/assets-manifest.json'), 'utf8', (err, data)->
       throw err if err?
 
       manifest = JSON.parse data

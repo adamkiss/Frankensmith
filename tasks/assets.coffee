@@ -4,7 +4,7 @@ module.exports = (g, gp, config)->
   # FONTS
   ##
   g.task 'fonts', ()->
-    gp.remoteSrc 'assets/fonts/*.*'
+    gp.remoteSrc 'source/assets/fonts/*.*'
       .pipe changed 'public/assets/fonts'
       .pipe gp.remoteDest 'public/assets/fonts'
 
@@ -12,7 +12,7 @@ module.exports = (g, gp, config)->
   # IMAGES
   ##
   g.task 'images', ()->
-    gp.remoteSrc 'assets/images/**/*?(jpg|jpeg|png|gif|svg)'
+    gp.remoteSrc 'source/assets/images/**/*?(jpg|jpeg|png|gif|svg)'
       .pipe gp.plumber()
       .pipe gp.changed 'public/assets/images', {cwd: config.site.path()}
       .pipe gp.imagemin config.gp.imagemin
