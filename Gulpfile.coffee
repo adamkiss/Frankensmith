@@ -24,15 +24,16 @@ gulp.task 'serve:reload-site', ['metalsmith:serve'], ()->
 gulp.task 'serve:startup', ()->
   plugins.runSequence 'styles:serve', 'scripts:serve', 'images'
 
-gulp.task 'serve', ['connect-sync', 'serve:startup'], ()->
+gulp.task 'serve', ['connect-sync'], ()->
   plugins.remoteWatch 'source/assets/styles/**/*.?(scss|css)', ['styles:serve']
   plugins.remoteWatch 'source/assets/scripts/**/*.js', ['scripts:serve']
   plugins.remoteWatch 'source/assets/images/**/*.?(jpg|jpeg|png|gif|svg)', ['images']
   plugins.remoteWatch 'source/{data,partials,site}/**/*', ['serve:reload-site']
+gulp.task 'serve:with:startup', ['serve:startup', 'serve']
+
 
 gulp.task 'build', ['metalsmith:build']
 gulp.task 'build:all', ()->
   plugins.runSequence 'build:manifest-clean', 'metalsmith:build'
-
 
 gulp.task 'default', ['serve']
