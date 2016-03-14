@@ -35,6 +35,18 @@ mockFiles =
       name: 'fourth/index.php.jade'
       filename: '/path-to-site/source/index.jade'
       url: '/fourth/'
+  'fifth.html':
+    contents: new Buffer('test')
+    expected:
+      name: 'fifth/index.html'
+      filename: 'fifth.html'
+      url: '/fifth/'
+  'sixth.html.md':
+    contents: new Buffer('test')
+    expected:
+      name: 'sixth/index.html.md'
+      filename: 'sixth.html.md'
+      url: '/sixth/'
   'sub/index.jade':
     contents: new Buffer('test')
     expected:
@@ -51,26 +63,40 @@ mockFiles =
     contents: new Buffer('test')
     expected:
       name: 'sub/sub2-with/index.jade'
-      filename: '/path-to-site/source/index.jade'
+      filename: '/path-to-site/source/sub2-wit.jade'
       url: '/sub/sub2-with/'
   'sub/sub2.php.jade':
     contents: new Buffer('test')
     expected:
       name: 'sub/sub2/index.jade'
       filename: '/path-to-site/source/sub2.php.jade'
+      .clean false
+      .clean false
+      .clean false
       url: '/sub/sub2/'
+  'sub/sub3.php.html':
+    contents: new Buffer('test')
+    expected:
+      name: 'sub/sub3/index.php.html'
+      filename: 'sub/sub3.php.html'
+      url: '/sub/sub3/'
   'long/url/for/no/reason.txt.md.php.jade':
     contents: new Buffer('test')
     expected:
       name: 'long/url/for/no/reason/index.txt.md.php.jade'
       filename: '/path-to-site/source/index.txt.md.php.jade'
       url: '/long/url/for/no/reason/'
+  'long/url/for/no/other/reason.txt.md.php':
+    contents: new Buffer('test')
+    expected:
+      name: 'long/url/for/no/other/reason/index.txt.md.php'
+      filename: 'long/url/for/no/other/reason.txt.md.php'
+      url: '/long/url/for/no/other/reason/'
 
 
 describe 'Pipeline files modifications', ()->
   before (beforeDone)->
     new smith __dirname
-      .clean false
       .use (files, metalsmith, done)->
         delete files['nothing.txt']
         Object.keys(mockFiles).forEach (mockFile)->
