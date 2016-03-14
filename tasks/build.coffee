@@ -13,7 +13,7 @@ module.exports = (g, gp, config)->
       .pipe gp.hash()
       .pipe gp.remoteDest 'public/assets'
       .pipe gp.hash.manifest('assets-manifest.json')
-      .pipe gp.remoteDest 'data'
+      .pipe gp.remoteDest 'source/data'
 
   g.task 'build:manifest-clean', ['build:manifest'], ()->
     fs = require 'fs'

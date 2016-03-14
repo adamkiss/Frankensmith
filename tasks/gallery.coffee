@@ -68,7 +68,7 @@ module.exports = (g, gp, cfg)->
     glob.sync(cfg.site.path 'source/galleries/*/').forEach (directory)->
       gallery = new Directory directory, cfg.fs
       fs.writeFileSync(
-        cfg.site.path("data/#{gallery.getJsonFilename()}"),
+        cfg.site.path("source/data/#{gallery.getJsonFilename()}"),
         gallery.getJson(), 'utf8'
       )
 
