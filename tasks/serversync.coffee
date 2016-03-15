@@ -5,7 +5,6 @@ module.exports = (gulp, gp, cfg)->
     gp.connectPhp.server {
       port:      1110
       ini:       cfg.self.path 'php/server.ini'
-      router:    cfg.self.path 'php/router.php'
       stdio:     [0, 'ignore', 'pipe']
       keepalive: true
       base:      cfg.site.path('public')
