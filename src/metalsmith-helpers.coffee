@@ -16,10 +16,18 @@ module.exports = (g, gp, MS, msp, cfg) ->
     fsmarkdown: (renderString)->
       fsmarkdown.render(renderString).body if renderString?
 
+    phpEcho: (renderString)->
+      "<?= #{renderString} ?>" if renderString?
+    php: (renderString)->
+      "<?php #{renderString} ?>" if renderString?
+
     assets: (file)->
       if cfg.runtime.build && cfg.runtime.assets
         file = cfg.runtime.assets[file]
 
       if _(file).endsWith('.css') then html.css file else html.js file
+
+  # aliases
+  helpers.phpecho = helpers.phpEcho
 
   return helpers
