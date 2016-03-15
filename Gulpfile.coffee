@@ -1,11 +1,12 @@
 'use strict'
 
-require './src/pretty-error'
+pe = require('./src/pretty-error')()
 
 gulp        = require 'gulp'
 config      = require('./src/config')()
 plugins     = require('gulp-load-plugins')()
 plugins     = require('./src/gulp-plugins')(gulp, plugins, config)
+plugins.prettyError = pe
 
 require('./tasks/metalsmith')(gulp, plugins, config)
 require('./tasks/serversync')(gulp, plugins, config)
