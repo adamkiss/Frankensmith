@@ -1,4 +1,4 @@
-should = require('chai').should()
+assert = require('chai').assert
 smith  = require 'metalsmith'
 _      = require 'lodash'
 
@@ -10,6 +10,7 @@ mockConfig =
 metalsmithPlugins = require '../src/metalsmith-plugins'
 msp = metalsmithPlugins(null,null,smith,{},mockConfig)
 
+mockFilesResult = {}
 mockFiles =
   'index.jade':
     contents: new Buffer('test')
@@ -33,7 +34,7 @@ mockFiles =
     contents: new Buffer('test')
     expected:
       name: 'fourth/index.php.jade'
-      filename: '/path-to-site/source/index.jade'
+      filename: '/path-to-site/source/fourth.php.jade'
       url: '/fourth/'
   'fifth.html':
     contents: new Buffer('test')
@@ -50,9 +51,9 @@ mockFiles =
   'sub/index.jade':
     contents: new Buffer('test')
     expected:
-      name: 'index.jade'
+      name: 'sub/index.jade'
       filename: '/path-to-site/source/index.jade'
-      url: '/'
+      url: '/sub/'
   'sub/sub2.jade':
     contents: new Buffer('test')
     expected:
@@ -63,14 +64,14 @@ mockFiles =
     contents: new Buffer('test')
     expected:
       name: 'sub/sub2-with/index.jade'
-      filename: '/path-to-site/source/sub2-wit.jade'
+      filename: '/path-to-site/source/sub2-with.jade'
       url: '/sub/sub2-with/'
-  'sub/sub2.php.jade':
+  'sub/subphp.php.jade':
     contents: new Buffer('test')
     expected:
-      name: 'sub/sub2/index.jade'
-      filename: '/path-to-site/source/sub2.php.jade'
-      url: '/sub/sub2/'
+      name: 'sub/subphp/index.php.jade'
+      filename: '/path-to-site/source/subphp.php.jade'
+      url: '/sub/subphp/'
   'sub/sub3.php.html':
     contents: new Buffer('test')
     expected:
@@ -81,7 +82,7 @@ mockFiles =
     contents: new Buffer('test')
     expected:
       name: 'long/url/for/no/reason/index.txt.md.php.jade'
-      filename: '/path-to-site/source/index.txt.md.php.jade'
+      filename: '/path-to-site/source/reason.txt.md.php.jade'
       url: '/long/url/for/no/reason/'
   'long/url/for/no/other/reason.txt.md.php':
     contents: new Buffer('test')
@@ -101,11 +102,18 @@ describe 'Pipeline files modifications', ()->
         done()
       .use msp.metaPath()
       .build (err, files)->
+        mockFilesResult = files
         beforeDone()
 
   Object.keys(mockFiles).forEach (name)->
     it "should modify #{name} correctly", (done)->
-      name.should.be.equal mockFiles[name].expected.name
-      # mockFiles[name].filename.should.be.equal mockFiles[name].expected.filename
-      # mockFiles[name].url.should.be.equal mockFiles[name].expected.url
+      exp = mockFiles[name].expected
+      newName = exp.name
+      assert mockFilesResult[newName], 'object', 'Result file exists'
+
+      file = mockFilesResult[newName]
+      assert.equal file.origname, name, 'Original file'
+      assert.equal file.destname, newName, 'Indexed target name'
+      assert.equal file.filename, exp.filename, 'Filename for Jade or original'
+      assert.equal file.url, exp.url, 'Permalink URL'
       done()
