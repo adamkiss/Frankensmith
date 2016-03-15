@@ -25,6 +25,13 @@ module.exports = ()->
         noarg: true
         undef: true
         unused: 'vars'
+      coffeelint:
+        cyclomatic_complexity:
+          level: 'warn'
+        no_empty_functions:
+          level: 'warn'
+        no_interpolation_in_single_quotes:
+          level: 'error'
       sass:
         build:
           outputStyle:    'compressed'
