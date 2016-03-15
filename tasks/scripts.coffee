@@ -23,9 +23,13 @@ module.exports = (g, gp, config)->
       transform: [gp.coffeeify]
     }
       .bundle()
+      .on 'error', (err)->
+        console.log gp.prettyError.render err
+        this.emit 'end'
       .pipe gp.plumber()
       .pipe gp.vinyl.source path.basename(entry)
       .pipe gp.vinyl.buffer()
+      .pipe gp.rename { extname: '.js'}
 
   #
   # This is abomination. Whatever
@@ -42,7 +46,7 @@ module.exports = (g, gp, config)->
         done()
 
     jsSource = if !build && gu.env.js? then gu.env.js else '*'
-    glob "source/assets/scripts/#{jsSource}.js", { cwd: config.site.path() }, (err, files)->
+    glob "source/assets/scripts/#{jsSource}.{js,coffee}", { cwd: config.site.path() }, (err, files)->
       done(err) if err
 
       files.forEach (entry)->

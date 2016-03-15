@@ -27,7 +27,7 @@ gulp.task 'serve:startup', ()->
 
 gulp.task 'serve', ['connect-sync'], ()->
   plugins.remoteWatch 'source/assets/styles/**/*.?(scss|css)', ['styles:serve']
-  plugins.remoteWatch 'source/assets/scripts/**/*.js', ['scripts:serve']
+  plugins.remoteWatch 'source/assets/scripts/**/*.?(coffee|js)', ['scripts:serve']
   plugins.remoteWatch 'source/assets/images/**/*.?(jpg|jpeg|png|gif|svg)', ['images']
   plugins.remoteWatch 'source/{data,partials,site}/**/*', ['serve:reload-site']
 gulp.task 'serve:with:startup', ['serve:startup', 'serve']
