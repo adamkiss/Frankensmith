@@ -7,6 +7,7 @@ module.exports = (gulp, gp, cfg)->
       port:      1110
       ini:       cfg.self.path 'php/server.ini'
       stdio:     [0,1,'ignore']
+      router:    cfg.self.path 'php/router.php'
       keepalive: true
       base:      cfg.site.path('public')
     }, ()->
