@@ -8,7 +8,7 @@ module.exports = (g, gp, cfg)->
 
   renameMap = [
     [/\.php\.jade$/, '.php'],
-    [/\.jade$/     , '.htm']
+    [/\.jade$/     , '.html']
   ]
 
   Metalsmith: (opts, callback)->
