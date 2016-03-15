@@ -36,8 +36,8 @@ gulp.task 'serve', ['connect-sync'], ()->
     images:  plugins.remoteWatch(
       'source/assets/images/**/*.?(jpg|jpeg|png|gif|svg)'
       ['images'])
-    source:  plugins.remoteWatch (
-      'source/{data,partials,site}/**/*'
+    source:  plugins.remoteWatch(
+      'source/{data,partials,site}/**/*.*'
       ['serve:reload-site'])
   watchers.scripts.on 'change', (event)->
     lintTarget = event.path.replace config.site.path()+'/', ''
