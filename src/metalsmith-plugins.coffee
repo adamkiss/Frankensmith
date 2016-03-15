@@ -2,7 +2,7 @@
 _      = require 'lodash'
 fs     = require 'fs'
 glob   = require 'glob'
-mm     = require 'minimatch'
+mm     = require 'multimatch'
 path   = require 'path'
 matter = require 'gray-matter'
 marked = require 'marked'
@@ -27,7 +27,7 @@ module.exports = (g, gp, ms, msp, cfg) ->
       return parsed
 
     isJade = (parsed)->
-      (parsed.ext.indexOf('jade') != -1)
+      parsed.ext is '.jade'
 
     jadeFilename = (parsed)->
       cfg.site.path('source/' + parsed.base)
@@ -51,32 +51,50 @@ module.exports = (g, gp, ms, msp, cfg) ->
     Adds permalinks to files, except if `permalink: false` is set or file matches exceptions.
   ###
   msp.permalinks = ()->
-    match = '**/*.{php,html,htm}';
+    match = '**/*.{php,html,htm,jade,php.jade}';
 
-    indexedName = (parsed)->
-      [ parsed.dir, ('/' if parsed.dir.length),
-        parsed.name, ('/index' if parsed.name isnt 'index'),
-        parsed.ext
+    indexedName = (name, pathInfo)->
+      pathParts = name.split('.')
+      pathParts.shift()
+      pathInfo.ext_ = '.' + pathParts.join('.')
+      [ pathInfo.dir, ('/' if pathInfo.dir.length),
+        pathInfo.name, '/index',
+        pathInfo.ext_
       ].join ''
 
-    permalink = (parsed)->
-      [ '/',
-        parsed.dir, ('/' if parsed.dir.length),
-        (parsed.name + '/' if parsed.name isnt 'index')
-      ].join ''
+    setUrl = (filePath)->
+      '/' + filePath
+
+    setPermalink = (filePath)->
+      pathParts = filePath.split('/')
+      pathParts.splice(-1,1)
+      path.normalize('/' + pathParts.join('/') + '/')
 
     (files, metalsmith, done)->
       matched = mm Object.keys(files), match
-      for name, file in files
+      for name, file of files
+        # is this file good for /path/to/file/
         skipPermalink =
-          matched.indexOf(name) isnt -1 ||
+          matched.indexOf(name) is -1 ||
           (file.permalink? && !file.permalink)
-        if skipPermalink
-          file.url
-          if file.destname isnt name
-            delete files[name]
-            files[file.destname] = file
 
+        # do we need to move it around?
+        unless skipPermalink or file.pathInfo.name is 'index'
+          oldName = name
+          name = indexedName(oldName, file.pathInfo)
+
+          if Object.keys(files).indexOf(name) != -1
+            throw new Error "File to permalink to exists already: #{name} (trying to move #{oldName})"
+
+          delete files[oldName]
+          files[name] = file
+
+        # now we set URL to all files
+        if skipPermalink
+          files[name].url = setUrl name
+        else
+          files[name].url = setPermalink name
+      done()
 
   ###
     Read data file
