@@ -13,33 +13,43 @@ module.exports = (g, gp, ms, msp, cfg) ->
     - filename (either path/to/file.ext, or full path for jade files)
     - url (clean URL: /path/to/file/)
   ###
-  class File
-    @file
-
-    constructor: (name, contents)->
-      contents.path.original = name
-      @file = contents
-      @name = path.parse name
-
-    isJade: ()->
-      console.log @name
-
-
   msp.metaPath = ()->
-    isJade = (name)->
-      (name.indexOf('.jade') != -1)
+    pathParsePlus = (name)->
+      parsed = path.parse name
 
-    jadeFilename = (name)->
-      cfg.site.path 'source/' + name.split('/').pop()
+      splitName = parsed.name.split('.')
+      parsed.name = splitName.shift()
 
-    indexify = (name)->
-      name
+      nameExt = splitName.join '.'
+      parsed.ext = ['.' if nameExt, nameExt, parsed.ext].join ''
+
+      return parsed
+
+    isJade = (parsed)->
+      (parsed.ext.indexOf('jade') != -1)
+
+    jadeFilename = (parsed)->
+      cfg.site.path('source/' + parsed.base)
+
+    buildName = (parsed)->
+      [ parsed.dir, ('/' if parsed.dir.length),
+        parsed.name, ('/index' if parsed.name isnt 'index'),
+        parsed.ext
+      ].join ''
+
+    permalink = (parsed)->
+      [ '/',
+        parsed.dir, ('/' if parsed.dir.length),
+        (parsed.name + '/' if parsed.name isnt 'index')
+      ].join ''
 
     process = (name)->
+      parsed = pathParsePlus name
       {
-        destname: indexify(name)
-        filename: if isJade(name) then jadeFilename(name) else name
-        url: name.split('.')[0]
+        origname: name
+        destname: buildName(parsed)
+        filename: if isJade(parsed) then jadeFilename(parsed) else name
+        url: permalink(parsed)
       }
 
     (files, metalsmith, done)->
