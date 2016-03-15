@@ -1,0 +1,11 @@
+{
+  "name": "jstransformer-php",
+  "version": "0.1.0",
+  "description": "JSTransformer wrapping a block of code in php tags: <?php ?>",
+  "main": "jstransformer-php.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Kiss <iam@adamkiss.com> (http://adamkiss.com)",
+  "license": "ISC"
+}
