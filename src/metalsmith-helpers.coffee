@@ -1,5 +1,5 @@
 _      = require 'lodash'
-marked = require 'marked'
+fsmarkdown = require('jstransformer')(require('jstransformer-fsmarkdown'))
 
 module.exports = (g, gp, MS, msp, cfg) ->
 
@@ -11,8 +11,10 @@ module.exports = (g, gp, MS, msp, cfg) ->
   }
 
   helpers =
-    md: (string)->
-      marked string
+    md: (renderString)->
+      fsmarkdown.render(renderString).body if renderString?
+    fsmarkdown: (renderString)->
+      fsmarkdown.render(renderString).body if renderString?
 
     assets: (file)->
       if cfg.runtime.build && cfg.runtime.assets

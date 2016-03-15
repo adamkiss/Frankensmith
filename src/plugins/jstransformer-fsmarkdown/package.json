@@ -1,0 +1,16 @@
+{
+  "name": "jstransformer-fsmarkdown",
+  "version": "0.2.0",
+  "description": "JSTransformer for Markdown using markdown-it with preselected options and plugins",
+  "main": "jstransformer-fsmarkdown.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Kiss <iam@adamkiss.com> (http://adamkiss.com)",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.6.1",
+    "markdown-it": "^6.0.0",
+    "markdown-it-footnote": "^2.0.0"
+  }
+}
