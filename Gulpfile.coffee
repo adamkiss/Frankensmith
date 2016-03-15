@@ -26,10 +26,26 @@ gulp.task 'serve:startup', ()->
   plugins.runSequence 'styles:serve', 'scripts:serve', 'images'
 
 gulp.task 'serve', ['connect-sync'], ()->
-  plugins.remoteWatch 'source/assets/styles/**/*.?(scss|css)', ['styles:serve']
-  plugins.remoteWatch 'source/assets/scripts/**/*.?(coffee|js)', ['scripts:serve']
-  plugins.remoteWatch 'source/assets/images/**/*.?(jpg|jpeg|png|gif|svg)', ['images']
-  plugins.remoteWatch 'source/{data,partials,site}/**/*', ['serve:reload-site']
+  watchers =
+    styles:  plugins.remoteWatch(
+      'source/assets/styles/**/*.?(scss|css)'
+      ['styles:serve'])
+    scripts: plugins.remoteWatch(
+      'source/assets/scripts/**/*.?(coffee|js)'
+      ['scripts:serve'])
+    images:  plugins.remoteWatch(
+      'source/assets/images/**/*.?(jpg|jpeg|png|gif|svg)'
+      ['images'])
+    source:  plugins.remoteWatch (
+      'source/{data,partials,site}/**/*'
+      ['serve:reload-site'])
+  watchers.scripts.on 'change', (event)->
+    lintTarget = event.path.replace config.site.path()+'/', ''
+    if lintTarget.endsWith '.js'
+      plugins.scriptsLintJs lintTarget
+    else
+      plugins.scriptsLintCoffee lintTarget
+
 gulp.task 'serve:with:startup', ['serve:startup', 'serve']
 
 

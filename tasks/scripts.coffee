@@ -66,20 +66,44 @@ module.exports = (g, gp, config)->
     gp.remoteSrc 'public/assets/*.js', {read: false}
       .pipe gp.clean()
 
-  # @TODO lint ONE file (changed)
-  # @TODO lint coffeescript
-  # ADD? (MAYBE OKAY?)
-  g.task 'scripts:lint', ()->
-    lintSource = if gu.env.js? then gu.env.js else '*'
-    gp.remoteSrc ["source/assets/scripts/#{gu.env.js}.js" , 'source/assets/scripts/src/*.js']
+
+  #
+  # Linting
+  # create stream and return
+  # were processed.
+  #
+  g.task 'scripts:lint', ['scripts:lint:all']
+  g.task 'scripts:lint:all', ['scripts:lint:js', 'scripts:lint:coffee']
+
+  gp.scriptsLintJs = (remoteSrcPath)->
+    gp.remoteSrc(remoteSrcPath)
       .pipe gp.plumber()
       .pipe gp.jshint config.gp.jshint
       .pipe gp.jshint.reporter 'jshint-stylish'
 
+  g.task 'scripts:lint:js', ()->
+    lintSource = if gu.env.js? then gu.env.js else '*'
+    gp.scriptsLintJs [
+      "source/assets/scripts/#{gu.env.js}.js",
+      'source/assets/scripts/src/*.js']
+
+  gp.scriptsLintCoffee = (remoteSrcPath)->
+    console.log 'linting…'
+    gp.remoteSrc(remoteSrcPath)
+      .pipe gp.plumber()
+      .pipe gp.coffeelint config.gp.coffeelint
+      .pipe gp.coffeelint.reporter 'coffeelint-stylish'
+
+  g.task 'scripts:lint:coffee', ()->
+    lintSource = if gu.env.js? then gu.env.js else '*'
+    gp.scriptsLintCoffee [
+      "source/assets/scripts/#{gu.env.js}.{coffee,litcoffee}",
+      'source/assets/scripts/src/*.{coffee,litcoffee}']
+
   g.task 'scripts:build', ['scripts:clean'], (done)->
     taskBrowserifyBuild(done, true)
 
-  g.task 'scripts:serve', ['scripts:lint'], (done)->
+  g.task 'scripts:serve', (done)->
     taskBrowserifyBuild(done)
 
   # Simple version for future ref.
