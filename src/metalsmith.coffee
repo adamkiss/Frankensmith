@@ -29,10 +29,10 @@ module.exports = (g, gp, cfg)->
       .use msp.virtualPages(cfg.metalsmith.generators)
       .use msp.define(cfg.metalsmith.metadata)
       .use msp.metaPath()
+      .use msp.collections(cfg.fs.collections)
       .use msp.inPlace(_.extend(cfg.mp.inPlace, msh))
       .use msp.rename(renameMap)
       .use msp.permalinks()
-      .use msp.collections(cfg.fs.collections)
 
       .build (error)->
         if (error)
