@@ -60,7 +60,6 @@
     "metalsmith-matters": "^1.1.0",
     "metalsmith-rename": "^1.0.0",
     "metalsmith-virtual-pages": "^0.4.0",
-    "minimatch": "^3.0.0",
     "multimatch": "^2.1.0",
     "pretty-error": "^2.0.0",
     "run-sequence": "^1.1.5",
