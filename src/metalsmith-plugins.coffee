@@ -2,6 +2,7 @@
 _      = require 'lodash'
 fs     = require 'fs'
 glob   = require 'glob'
+mm     = require 'minimatch'
 path   = require 'path'
 matter = require 'gray-matter'
 marked = require 'marked'
@@ -10,8 +11,8 @@ module.exports = (g, gp, ms, msp, cfg) ->
   ###
     Include metadata to files
 
+    - parsed pathInfo (with pathInfo.ext_ - full ext)
     - filename (either path/to/file.ext, or full path for jade files)
-    - url (clean URL: /path/to/file/)
   ###
   msp.metaPath = ()->
     pathParsePlus = (name)->
@@ -21,7 +22,7 @@ module.exports = (g, gp, ms, msp, cfg) ->
       parsed.name = splitName.shift()
 
       nameExt = splitName.join '.'
-      parsed.ext = ['.' if nameExt, nameExt, parsed.ext].join ''
+      parsed.ext_ = ['.' if nameExt, nameExt, parsed.ext].join ''
 
       return parsed
 
@@ -31,7 +32,28 @@ module.exports = (g, gp, ms, msp, cfg) ->
     jadeFilename = (parsed)->
       cfg.site.path('source/' + parsed.base)
 
-    buildName = (parsed)->
+    process = (name, skipPermalink)->
+      parsed = pathParsePlus name
+      {
+        pathInfo: parsed
+        origname: name
+        filename: if isJade(parsed) then jadeFilename(parsed) else name
+      }
+
+    (files, metalsmith, done)->
+      for name, file of files
+        _.merge file, process(name)
+      done()
+
+  ###
+    Custom permalinks (and URL metadata)
+
+    Adds permalinks to files, except if `permalink: false` is set or file matches exceptions.
+  ###
+  msp.permalinks = ()->
+    match = '**/*.{php,html,htm}';
+
+    indexedName = (parsed)->
       [ parsed.dir, ('/' if parsed.dir.length),
         parsed.name, ('/index' if parsed.name isnt 'index'),
         parsed.ext
@@ -43,23 +65,18 @@ module.exports = (g, gp, ms, msp, cfg) ->
         (parsed.name + '/' if parsed.name isnt 'index')
       ].join ''
 
-    process = (name)->
-      parsed = pathParsePlus name
-      {
-        origname: name
-        destname: buildName(parsed)
-        filename: if isJade(parsed) then jadeFilename(parsed) else name
-        url: permalink(parsed)
-      }
-
     (files, metalsmith, done)->
-      for name, file of files
-        update = process name
-        _.merge file, update
-        if file.destname isnt name
-          delete files[name]
-          files[file.destname] = file
-      done()
+      matched = mm Object.keys(files), match
+      for name, file in files
+        skipPermalink =
+          matched.indexOf(name) isnt -1 ||
+          (file.permalink? && !file.permalink)
+        if skipPermalink
+          file.url
+          if file.destname isnt name
+            delete files[name]
+            files[file.destname] = file
+
 
   ###
     Read data file
