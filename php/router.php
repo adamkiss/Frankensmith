@@ -1,59 +1,63 @@
 <?php
   # settings
   $s_document_root = 'index';
-  $s_lookup_extensions = ['php', 'html', 'htm'];
+  $s_document_exts = ['php', 'html', 'htm'];
 
   # shortcut functions
+  function doc_exists($path) {
+    global $s_document_exts;
+    foreach($s_document_exts as $ext){
+      $lookup = "{$path}.{$ext}";
+      if (file_exists($lookup)){
+        return $lookup;
+      }
+    }
+    return false;
+  }
   function redirect($path){
     if(empty($path)) $path = '/';
     header("Location: {$path}");
     exit;
   }
-  function redirect_pathinfo($info){
-    redirect(rtrim($info['dirname'], '/').'/'.$info['filename']);
-  }
   function return_404(){
     header("HTTP/1.0 404 Not found");
+    if ($doc404 = doc_exists('404')){
+      require $doc404; exit;
+    }
     echo '<html>
-  <head><title>404</title></head>
-  <body>404 Not found</body>
-</html>';
-    exit;
+    <head><title>404</title></head>
+    <body>404 Not found</body>
+  </html>'; exit;
   }
 
-  # let's go
+  # DATA
+  #
   $path = $_SERVER['REQUEST_URI'] ?: '/';
   $info = pathinfo($path);
+  $info['dirname'] = ltrim($info['dirname'].'/', '/');
+  // @note: pathinfo = array[ dirname, basename, filename . extension]
 
-  # If there's extension, we check whether we're intereste in the file
-  # - Yes: redirect to no extension
-  # - No:  ignore it and serve the file
-  if (array_key_exists('extension', $info)){
-    if (in_array($info['extension'], $s_lookup_extensions)){
-      redirect_pathinfo($info);
-    }
-    return false;
-  } else {
-    # Redirect /file/index to /file
-    if (substr($path, -5) === 'index'){
-      redirect(substr($path, 0, -6));
-    }
-    # Remove leading slash
-    $path = ltrim($path, '/');
-    # For lookup, put index back.
-    if (substr($path, -1, 1)==='/' or empty($path)){
-      $path .= $s_document_root;
-    }
+  $hasExtension = array_key_exists('extension', $info);
+  $isPage = $hasExtension && in_array($info['extension'], $s_document_exts);
+  $isDocRoot = $isPage && $info['filename'] === 'index';
+  $isPermalink = !$hasExtension && (substr($path, -1)==='/');
 
-    # Look for the file
-    foreach($s_lookup_extensions as $ext){
-      $lookup = "{$path}.{$ext}";
-      if (file_exists($lookup)){
-        require $lookup;
-        exit;
-      }
-    }
-
-    #  ¯\_(ツ)_/¯
-    return_404();
+  # ACTION
+  #
+  if ($isDocRoot){
+    redirect("/{$info['dirname']}/");
   }
+  if ($hasExtension && !$isPage) {
+    return false;
+  }
+  if ($isPage && file_exists("{$info['dirname']}{$info['basename']}")){
+    require "{$info['dirname']}{$info['basename']}"; exit;
+  }
+  if ($isPermalink) {
+    if ($index = doc_exists(ltrim("{$path}index",'/'))) {
+      require $index; exit;
+    }
+  }
+
+  #  ¯\_(ツ)_/¯
+  return_404();
