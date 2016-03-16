@@ -99,11 +99,18 @@ module.exports = (g, gp, config)->
       "source/assets/scripts/#{gu.env.js}.{coffee,litcoffee}",
       'source/assets/scripts/src/*.{coffee,litcoffee}']
 
-  g.task 'scripts:build', ['scripts:clean'], (done)->
+  g.task 'scripts:build', ['scripts:clean', 'scripts:vendor'], (done)->
     taskBrowserifyBuild(done, true)
 
-  g.task 'scripts:serve', (done)->
+  g.task 'scripts:serve', ['scripts:vendor'], (done)->
     taskBrowserifyBuild(done)
+
+  g.task 'scripts:vendor', (done)->
+    gp.remoteSrc 'source/assets/scripts/vendor/*.js'
+      .pipe gp.plumber()
+      .pipe gp.changed 'public/assets/vendor', {cwd: config.site.path()}
+      .pipe gp.remoteDest 'public/assets/vendor'
+
 
   # Simple version for future ref.
   g.task 'scripts:browserify', ()->
