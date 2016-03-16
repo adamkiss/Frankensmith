@@ -11,7 +11,7 @@ module.exports = (g, gp, config)->
     gp.remoteSrc "source/assets/styles/#{cssSource}.scss"
       .pipe gp.plumber()
       .pipe gp.sass(config.gp.sass[if build then 'build' else 'serve'])
-      .pipe gp.autoprefixer ['last 2 versions', 'ie 8', 'ios 7', 'android 4']
+      .pipe gp.autoprefixer ['last 2 versions', 'ie 9', 'ios 7', 'android 4']
       .pipe gp.remoteDest 'public/assets'
 
   g.task 'styles:clean', ()->
