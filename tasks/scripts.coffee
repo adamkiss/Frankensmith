@@ -88,7 +88,6 @@ module.exports = (g, gp, config)->
       'source/assets/scripts/src/*.js']
 
   gp.scriptsLintCoffee = (remoteSrcPath)->
-    console.log 'linting…'
     gp.remoteSrc(remoteSrcPath)
       .pipe gp.plumber()
       .pipe gp.coffeelint config.gp.coffeelint
@@ -112,10 +111,12 @@ module.exports = (g, gp, config)->
       basedir: config.site.path()
       entries: 'source/assets/scripts/app.js'
       extensions: '.coffee'
-      # debug: true
+      debug: true
       transform: [gp.coffeeify]
     }
     .bundle()
     .pipe gp.vinyl.source './app.js'
     .pipe gp.vinyl.buffer()
+    .pipe gp.jshint config.gp.jshint
+    .pipe gp.jshint.reporter 'jshint-stylish'
     .pipe gp.remoteDest 'public/assets'
