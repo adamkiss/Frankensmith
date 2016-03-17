@@ -44,9 +44,9 @@ Includes automatic vendor globbing (so you don't have to remeber used version) a
       path: require 'path'
 
       cssTag: (path)->
-        "<link rel=stylesheet href=/assets/#{path} />"
+        "<link rel=\"stylesheet\" href=\"/assets/#{path}\" />"
       jsTag: (path)->
-        "<script src=/assets/#{path}></script>"
+        "<script src=\"/assets/#{path}\"></script>"
 
       get: (file)=>
         build = @FS.cfg.runtime.build if @FS?.cfg?.runtime?.build?
