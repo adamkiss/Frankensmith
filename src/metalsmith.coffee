@@ -3,8 +3,9 @@ module.exports = (g, gp, cfg)->
   _   = require 'lodash'
   MS  = require 'metalsmith'
   msp = require('load-metalsmith-plugins')()
-  msh = require('./metalsmith-helpers')(g, gp, MS, msp, cfg)
   msp = require('./metalsmith-plugins')(g, gp, MS, msp, cfg)
+
+  jadeHelpers = require('./jade-helpers')({g: g, gp: gp, ms: MS, msp: msp, cfg: cfg})
 
   renameMap = [
     [/\.php\.jade$/, '.php'],
@@ -31,7 +32,7 @@ module.exports = (g, gp, cfg)->
       .use msp.metaPath()
       .use msp.permalinks()
       .use msp.collections(cfg.fs.collections)
-      .use msp.inPlace(_.extend(cfg.mp.inPlace, msh))
+      .use msp.inPlace(_.extend(cfg.mp.inPlace, jadeHelpers))
       .use msp.rename(renameMap)
 
       .build (error)->
