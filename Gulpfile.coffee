@@ -25,20 +25,24 @@ gulp.task 'serve:reload-site', ['metalsmith:serve'], ()->
 gulp.task 'serve:startup', ()->
   plugins.runSequence 'styles:serve', 'scripts:serve', 'images'
 
-gulp.task 'serve', ['connect-sync'], ()->
+gulp.task 'serve:watch', ['connect-sync'], ()->
   watchers =
     styles:  plugins.remoteWatch(
       'source/assets/styles/**/*.?(scss|css)'
-      ['styles:serve'])
+      ()-> plugins.runSequence 'styles:serve'
+    )
     scripts: plugins.remoteWatch(
       'source/assets/scripts/**/*.?(coffee|js)'
-      ['scripts:serve'])
+      ()-> plugins.runSequence 'scripts:serve'
+    )
     images:  plugins.remoteWatch(
       'source/assets/images/**/*.?(jpg|jpeg|png|gif|svg)'
-      ['images'])
+      ()-> plugins.runSequence 'images'
+    )
     source:  plugins.remoteWatch(
       'source/{data,layouts,site}/**/*.*'
-      ['serve:reload-site'])
+      ()-> plugins.runSequence 'serve:reload-site'
+    )
   watchers.scripts.on 'change', (event)->
     lintTarget = event.path.replace config.site.path()+'/', ''
     if lintTarget.endsWith '.js'

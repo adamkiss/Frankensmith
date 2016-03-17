@@ -10,7 +10,11 @@ module.exports = (gulp, plugins, config)->
 
   # gulp.watch wrapper as above
   plugins.remoteWatch = (globs, tasks)->
-    gulp.watch globs, { cwd: config.site.path() }, tasks
+    plugins.watch(globs, {
+      cwd: config.site.path()
+      read: false
+      readDelay: 50
+    }, tasks)
 
   plugins.del = require 'del'
   plugins.runSequence = require 'run-sequence'
