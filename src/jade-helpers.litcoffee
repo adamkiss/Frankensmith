@@ -38,8 +38,6 @@ Includes automatic vendor globbing (so you don't have to remeber used version) a
     class HelperAssets
       constructor: (FS)->
         @FS = FS
-        @build = FS.cfg.runtime?.build?
-        @assets = FS.cfg.runtime?.assets?
         @cache = {found: {}, notfound: []}
 
       glob: require 'glob'
@@ -51,7 +49,9 @@ Includes automatic vendor globbing (so you don't have to remeber used version) a
         "<script src=/assets/#{path}></script>"
 
       get: (file)=>
-        file = @assets[file] if @build and @assets
+        build = @FS.cfg.runtime.build if @FS?.cfg?.runtime?.build?
+        assets = @FS.cfg.runtime.assets if @FS?.cfg?.runtime?.assets?
+        file = assets[file] if build? and assets?
         if file[-3..] is 'css'
           @cssTag file
         else
