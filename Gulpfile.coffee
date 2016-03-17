@@ -50,7 +50,7 @@ gulp.task 'serve:watch', ['connect-sync'], ()->
     else
       plugins.scriptsLintCoffee lintTarget
 
-gulp.task 'serve:with:startup', ['serve:startup', 'serve']
+gulp.task 'serve', ['serve:startup', 'serve:watch']
 
 
 gulp.task 'build', ['metalsmith:build']
