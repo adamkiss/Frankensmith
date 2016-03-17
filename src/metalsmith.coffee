@@ -18,6 +18,8 @@ module.exports = (g, gp, cfg)->
       build: opts.build || false
       assets: cfg.metalsmith.metadata['assets-manifest']
     }
+    cfg.metalsmith.metadata.env =
+      build: cfg.runtime.build
 
     MS cfg.site.path()
       .source      'source/site'
