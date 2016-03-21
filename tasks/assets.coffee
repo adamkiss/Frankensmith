@@ -5,7 +5,7 @@ module.exports = (g, gp, config)->
   ##
   g.task 'fonts', ()->
     gp.remoteSrc 'source/assets/fonts/*.*'
-      .pipe changed 'public/assets/fonts'
+      .pipe gp.changed 'public/assets/fonts'
       .pipe gp.remoteDest 'public/assets/fonts'
 
   ##
