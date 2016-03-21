@@ -51,7 +51,7 @@ Includes automatic vendor globbing (so you don't have to remeber used version) a
       get: (file)=>
         build = @FS.cfg.runtime.build if @FS?.cfg?.runtime?.build?
         assets = @FS.cfg.runtime.assets if @FS?.cfg?.runtime?.assets?
-        file = assets[file] if build? and assets?
+        file = assets[file] if build? and assets? and build
         if file[-3..] is 'css'
           @cssTag file
         else
