@@ -43,8 +43,8 @@ gulp.task 'serve:watch', ['connect-sync'], ()->
       'source/{data,layouts,site}/**/*.*'
       ()-> plugins.runSequence 'serve:reload-site'
     )
-  watchers.scripts.on 'change', (event)->
-    lintTarget = event.path.replace config.site.path()+'/', ''
+  watchers.scripts.on 'change', (file)->
+    lintTarget = file.replace config.site.path()+'/', ''
     if lintTarget.endsWith '.js'
       plugins.scriptsLintJs lintTarget
     else
