@@ -91,4 +91,5 @@ And away we go, We package stuff for extraction into Jade.
         md : markdownRender
         assets: assetHelper.get
         vendor: assetHelper.vendor
+        moment: require 'moment'
       }
