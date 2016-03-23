@@ -39,8 +39,8 @@ module.exports = ()->
           errLogToConsole: true
         serve:
           sourceMap:         true
-          sourceMapContents: true
-          sourceComments:   'none'
+          sourceMapEmbed:    true
+          sourceComments:    true
           errLogToConsole:   true
       imagemin:
         progressive: true
