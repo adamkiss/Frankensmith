@@ -61,7 +61,7 @@ module.exports = (g, gp, cfg)->
     gp.remoteSrc 'source/galleries/**/*.{jpg,jpeg,png}'
       .pipe gp.imagemin { progressive: true }
       .pipe gp.remoteDest 'public/galleries'
-      .pipe gp.responsive cfg.fs.gallerySettings
+      .pipe gp.responsive cfg.fs.gallerySettings, { silent: true }
       .pipe gp.remoteDest 'public/galleries'
 
   g.task 'gallery:jsonize', ['gallery:optimize'], ()->
