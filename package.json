@@ -35,6 +35,7 @@
     "gulp-coffeelint": "~0.6.0",
     "gulp-connect-php": "0.0.7",
     "gulp-hash": "~3.0.6",
+    "gulp-if": "~2.0.0",
     "gulp-imagemin": "~2.4.0",
     "gulp-include": "~2.1.0",
     "gulp-jshint": "~2.0.0",

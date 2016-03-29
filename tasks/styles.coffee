@@ -10,13 +10,13 @@ module.exports = (g, gp, config)->
     cssSource = if !build && gu.env.css? then gu.env.css else '*'
     gp.remoteSrc "source/assets/styles/#{cssSource}.scss"
       .pipe gp.plumber()
-      .pipe gp.sourcemaps.init()
+      .pipe gp.if !build, gp.sourcemaps.init()
       .pipe(
         gp.sass(config.gp.sass[if build then 'build' else 'serve'])
           .on 'error', (err)-> console.error err.formatted; this.emit 'end'
       )
       .pipe gp.autoprefixer ['last 2 versions', 'ie 9', 'ios 7', 'android 4']
-      .pipe gp.sourcemaps.write()
+      .pipe gp.if !build, gp.sourcemaps.write()
       .pipe gp.remoteDest 'public/assets'
 
   g.task 'styles:clean', ()->
