@@ -23,7 +23,7 @@ gulp.task 'serve:reload-site', ['metalsmith:serve'], ()->
   gulp.task 'serve:reload'
 
 gulp.task 'serve:startup', ()->
-  plugins.runSequence 'styles:serve', 'scripts:serve', 'images', 'fonts'
+  plugins.runSequence 'styles:serve', 'scripts:serve', 'images', 'fonts', 'serve:reload-site'
 
 gulp.task 'serve:watch', ['connect-sync'], ()->
   watchers =
