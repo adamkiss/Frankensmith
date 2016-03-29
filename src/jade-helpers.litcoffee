@@ -87,6 +87,7 @@ And away we go, We package stuff for extraction into Jade.
     module.exports = (FS)->
       assetHelper = new HelperAssets(FS)
       {
+        '_': require 'lodash'
         php: new HelperPhp()
         md : markdownRender
         assets: assetHelper.get
