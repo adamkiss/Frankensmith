@@ -23,4 +23,6 @@ module.exports = (gulp, plugins, config)->
   plugins.coffeeify       = require 'coffeeify'
   plugins.bundleCollapser = require 'bundle-collapser/plugin'
 
+  plugins.notifier = require 'node-notifier'
+
   plugins

@@ -39,6 +39,10 @@ module.exports = (g, gp, cfg)->
 
       .build (error)->
         if (error)
+          gp.notifier.notify {
+            title: '❌ Error: METALSMITH'
+            message: error.message.substr error.message.lastIndexOf("\n")+1
+          }
           callback(error)
         else
           gp.browserSync.reload()
