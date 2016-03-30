@@ -8,7 +8,7 @@ module.exports = (g, gp, config)->
   ##
   # HASH LATEST STYLES & SCRIPTS
   ##
-  g.task 'build:manifest', ['styles:build', 'scripts:build'], ()->
+  g.task 'build:manifest', ['styles:build', 'scripts:build', 'images'], ()->
     gp.remoteSrc 'public/assets/*.?(js|css)'
       .pipe gp.hash()
       .pipe gp.remoteDest 'public/assets'
