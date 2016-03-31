@@ -40,7 +40,7 @@ gulp.task 'serve:watch', ['connect-sync'], ()->
       ()-> plugins.runSequence 'images'
     )
     source:  plugins.remoteWatch(
-      'source/{data,layouts,site}/**/*.*'
+      ['source/{data,layouts,site}/**/*.*', 'include/**/*.php']
       ()-> plugins.runSequence 'serve:reload-site'
     )
   watchers.scripts.on 'change', (file)->
