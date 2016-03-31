@@ -12,7 +12,5 @@
 exports.name = 'php';
 exports.outputFormat = 'php';
 exports.render = function (str, options) {
-  console.log(str,options);
-
   return '<?php '+str+' ?>';
 };
