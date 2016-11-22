@@ -16,6 +16,7 @@ module.exports = (gulp, gp, cfg)->
         port:   '1111'
         open:   false
         notify: false
+        # https:  true
         ghostMode:
           forms: false
       }) unless bs?
