@@ -1,6 +1,6 @@
 # Readme for v2 (in preparation)
 
-* [PHP — Composer and stuff](#php-composer)
+* [PHP — Composer and stuff](#php--composer)
 
 ## PHP & Composer
 
