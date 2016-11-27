@@ -1,8 +1,21 @@
 # Readme for v2 (in preparation)
 
+* [CLI](#cli)
 * [Upgrades to customisation of tasks](#upgrades)
 * [PHP — Composer and stuff](#php--composer)
 * [Deployment](#deployment)
+
+## CLI
+
+This should be split in two projects: Frankensmith (which will basically remain as-is, except with some upgrades to customisation, different naming, different directory structure) and Frankensmith-CLI, which would manage passing data between Site and "global" Frankensmith versions installed. Somehow :D
+
+### Frankensmith-CLI
+
+Take running data from `Cakefile` and create real, `yarn add global …` installable CLI. This should also manage installing of different versions
+
+### Frankensmith
+
+Allow to have more than one Frankensmith installed (Frankensmith1, Frankensmith2, etc.), so I can (if needed) try to run - or work on - older projects, if needed.
 
 ## Upgrades
 
