@@ -14,6 +14,12 @@ module.exports = (g, gp, config)->
   g.task 'images', ()->
     gp.remoteSrc 'source/assets/images/**/*?(jpg|jpeg|png|gif|svg)'
       .pipe gp.plumber()
+      .pipe gp.responsive (config.fs.responsiveImageSettings || {}), {
+        silent: true
+        passThroughUnused: true
+        errorOnUnusedImage: false
+        errorOnUnusedConfig: false
+      }
       .pipe gp.changed 'public/assets/images', {cwd: config.site.path()}
       .pipe gp.imagemin config.gp.imagemin
       .pipe gp.remoteDest 'public/assets/images'
