@@ -2,8 +2,13 @@
 # SCRIPTS
 ##
 
-module.exports = (g, gp, cfg)->
+# chm    = require '../src/charmap'
+# String.prototype.getUrlFormat = ()->
+#   Array.prototype.map.call this, (char)->
+#     chm[char.charCodeAt 0] || char
+#   .join('').toLowerCase().replace /[^a-z0-9-_\.]+/g, '-'
 
+module.exports = (g, gp, cfg)->
   fs     = require 'fs'
   chm    = require '../src/charmap'
   path   = require 'path'
