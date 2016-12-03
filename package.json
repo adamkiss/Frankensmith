@@ -4,7 +4,7 @@
   "description": "Static Site compiler cobbled together using Gulp & Metalsmith",
   "main": "Gulpfile.coffee",
   "scripts": {
-    "test": "mocha --reporter dot --compilers coffee:coffee-script/register --async-only"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -74,6 +74,6 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^2.4.5"
+    "mocha": "^3.2.0"
   }
 }
