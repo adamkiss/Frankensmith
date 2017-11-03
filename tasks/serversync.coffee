@@ -14,7 +14,7 @@ module.exports = (gulp, gp, cfg)->
       bs = gp.browserSync({
         proxy:  'localhost:1110'
         port:   '1111'
-        open:   false
+        open:   true
         notify: false
         # https:  true
         ghostMode:
