@@ -28,7 +28,7 @@ gulp.task 'serve:startup', ()->
 gulp.task 'serve:watch', ['connect-sync'], ()->
   watchers =
     styles:  plugins.remoteWatch(
-      'source/assets/styles/**/*.?(scss|css)'
+      'source/assets/styles/**/*.?(sass|scss|css)'
       ()-> plugins.runSequence 'styles:serve'
     )
     scripts: plugins.remoteWatch(

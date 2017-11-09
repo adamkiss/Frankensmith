@@ -42,6 +42,7 @@ module.exports = ()->
           sourceMapEmbed:    true
           sourceComments:    true
           errLogToConsole:   true
+
       imagemin:
         progressive: true
     mp:
@@ -53,6 +54,9 @@ module.exports = ()->
         cache : false
         pattern: '**/*.jade*'
   }
+
+  config.gp.sass.build.includePaths = [config.site.path('node_modules')]
+  config.gp.sass.serve.includePaths = [config.site.path('node_modules')]
 
   config.fs = require config.site.path 'site.litcoffee'
 

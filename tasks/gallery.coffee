@@ -9,11 +9,12 @@
 #   .join('').toLowerCase().replace /[^a-z0-9-_\.]+/g, '-'
 
 module.exports = (g, gp, cfg)->
-  fs     = require 'fs'
-  chm    = require '../src/charmap'
-  path   = require 'path'
-  glob   = require 'glob'
-  rimraf = require 'rimraf'
+  fs        = require 'fs'
+  chm       = require '../src/charmap'
+  path      = require 'path'
+  glob      = require 'glob'
+  rimraf    = require 'rimraf'
+  imagesize = require 'image-size'
 
   # Directory PARSER
   class Directory
@@ -34,6 +35,7 @@ module.exports = (g, gp, cfg)->
       {}=
         src: parsed.base
         thumb: [parsed.name, @thumbSuffix, parsed.ext].join ''
+        size: imagesize(file)
 
     getJsonFilename: ()->
       "gallery-#{@id}.json"
