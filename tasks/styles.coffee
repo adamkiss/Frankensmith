@@ -8,7 +8,7 @@ module.exports = (g, gp, config)->
 
   taskStyles = (build = false)->
     cssSource = if !build && gu.env.css? then gu.env.css else '*'
-    gp.remoteSrc "source/assets/styles/#{cssSource}.scss"
+    gp.remoteSrc "source/assets/styles/#{cssSource}.s*ss"
       .pipe gp.plumber()
       .pipe gp.if !build, gp.sourcemaps.init()
       .pipe(
