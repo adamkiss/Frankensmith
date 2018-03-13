@@ -6,6 +6,7 @@ mm     = require 'multimatch'
 path   = require 'path'
 matter = require 'gray-matter'
 marked = require 'marked'
+csvparse=require 'csv-parse/lib/sync'
 
 module.exports = (g, gp, ms, msp, cfg) ->
   ###
@@ -108,8 +109,17 @@ module.exports = (g, gp, ms, msp, cfg) ->
       metadata: {}
 
     glob.sync(cfg.site.path relativePath).forEach (file)->
+      fileExt   = path.parse(file).ext
       fileParts = path.parse(file).name.split('_')
-      fileData = matter( "---\n" + fs.readFileSync file ).data
+
+      if fileExt is '.csv'
+        fileData = csvparse(fs.readFileSync(file), {
+          columns: true
+          trim: true
+          auto_parse: true
+        })
+      else
+        fileData = matter( "---\n" + fs.readFileSync file ).data
 
       if fileParts[0] is 'generator'
         returnData.generators.push fileData
