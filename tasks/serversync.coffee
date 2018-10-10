@@ -12,11 +12,11 @@ module.exports = (gulp, gp, cfg)->
       base:      cfg.site.path('public')
     }, ()->
       bs = gp.browserSync({
-        proxy:  'localhost:1110'
+        proxy:  cfg.fs.proxyUrl or 'localhost:1110'
         port:   '1111'
         open:   true
         notify: false
-        # https:  true
+        https:  cfg.fs.proxyUrl or false
         ghostMode:
           forms: false
       }) unless bs?
