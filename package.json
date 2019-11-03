@@ -73,7 +73,7 @@
     "metalsmith-matters": "~1.1.0",
     "metalsmith-rename": "~1.0.0",
     "metalsmith-virtual-pages": "~0.4.1",
-    "moment": "~2.12.0",
+    "moment": "~2.19.3",
     "multimatch": "~2.1.0",
     "natives": "~1.1.6",
     "node-notifier": "~4.5.0",
